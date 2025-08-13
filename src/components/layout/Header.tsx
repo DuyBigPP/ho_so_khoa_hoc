@@ -2,7 +2,8 @@ import type React from "react"
 import { useLocation, Link } from "react-router-dom"
 import { ChevronRight, Home } from "lucide-react"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { menuItems } from "@/config/menu"
+import { getMenuItemsByRole } from "@/config/roleMenus"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface BreadcrumbItem {
   label: string
@@ -12,7 +13,8 @@ interface BreadcrumbItem {
 
 export function BreadcrumbHeader() {
   const location = useLocation()
-  const breadcrumbs = generateBreadcrumbs(location.pathname)
+  const { user } = useAuth()
+  const breadcrumbs = generateBreadcrumbs(location.pathname, user?.role)
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center bg-background px-4 lg:px-6">
@@ -58,7 +60,7 @@ export function BreadcrumbHeader() {
   )
 }
 
-function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
+function generateBreadcrumbs(pathname: string, userRole?: string): BreadcrumbItem[] {
   // Split the pathname into segments
   const paths = pathname.split("/").filter(Boolean)
   if (paths.length === 0) return []
@@ -81,7 +83,7 @@ function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
     processedPaths.add(currentPath)
 
     // Find matching menu item
-    const menuItem = findMenuItemByPath(currentPath)
+    const menuItem = findMenuItemByPath(currentPath, userRole)
     if (menuItem) {
       // Nếu đây là menu cha có children, thêm vào với đúng đường dẫn của nó
       // mà không tự động chuyển hướng đến submenu đầu tiên
@@ -102,8 +104,11 @@ function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
   return breadcrumbs
 }
 
-function findMenuItemByPath(path: string) {
-  // Search through the menu items for a matching path.
+function findMenuItemByPath(path: string, userRole?: string) {
+  // Search through the menu items for a matching path based on user role
+  if (!userRole) return null
+  
+  const menuItems = getMenuItemsByRole(userRole as 'admin' | 'user')
   return menuItems.find((item) => item.path === path)
 }
 

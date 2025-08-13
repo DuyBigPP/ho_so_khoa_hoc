@@ -10,16 +10,17 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { adminMenuItems } from "@/config/roleMenus"
-import { LucideLayoutDashboard, ChevronRight, LogOut } from "lucide-react"
+import { userMenuItems } from "@/config/roleMenus"
+import { LucideUser, ChevronRight, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/AuthContext"
 
-export function AdminSidebar() {
+export function UserSidebar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  
   // State to control which menu with children is open 
   const [openSubmenu, setOpenSubmenu] = React.useState<string | null>(null)
 
@@ -42,24 +43,23 @@ export function AdminSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <LucideLayoutDashboard className="h-4 w-4" />
+            <LucideUser className="h-4 w-4" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold">Hồ sơ khoa học</span>
+            <span className="text-sm font-semibold">Hệ thống Hồ sơ khoa học</span>
           </div>
         </div>
       </SidebarHeader>
-      {/* <SidebarSeparator /> */}
+      
       <SidebarContent className="p-2">
         <SidebarMenu>
-          {adminMenuItems.map((item) => {
+          {userMenuItems.map((item) => {
             if (item.children) {
               return (
                 <SidebarMenuItem key={item.path}>
                   <div>
                     <SidebarMenuButton
                       onClick={() => toggleSubmenu(item.path)}
-                      // Check if pathname starts with this item's path (to include children)
                       isActive={location.pathname.startsWith(item.path)}
                       tooltip={item.label}
                       className="flex justify-between items-center transition-colors hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent/50 data-[active=true]:font-medium"
@@ -110,13 +110,14 @@ export function AdminSidebar() {
           })}
         </SidebarMenu>
       </SidebarContent>
+      
       <SidebarFooter className="mt-auto border-t border-border p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarImage src={user?.avatar} alt={user?.name} />
               <AvatarFallback>
-                {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'A'}
+                {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">

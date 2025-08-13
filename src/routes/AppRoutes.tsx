@@ -36,7 +36,7 @@ function RootRedirect() {
   return <Navigate to={redirectPath} replace />
 }
 
-export function AdminRoutes() {
+export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
