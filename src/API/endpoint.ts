@@ -118,3 +118,154 @@ file *
 string($binary)
 */
 
+export const GET_ARTICLE = `${BASE_URL}/api/me/articles`; //GET
+/*
+param:
+status
+string
+(query)
+status
+limit
+integer
+(query)
+Default value : 50
+50
+offset
+integer
+response body:
+{
+  "articles": [
+    {
+      "id": 2,
+      "title": "Sự đồng nhiễm và đặc trưng kiểu gen của Porcine circovirus type 2 và 3 trên heo có dấu hiệu rối loạn sinh sản và hô hấp",
+      "journal_name": "Khoa học Kỹ thuật Thú y",
+      "publication_date": "2025-03-03",
+      "volume": "29",
+      "issue": "12",
+      "pages": "1-15",
+      "doi": null,
+      "is_main_author": 1,
+      "co_authors": "Nguyễn Văn B, Trần Thị C, Dr. John Smith",
+      "calculated_points": 0,
+      "status": "verified_auto",
+      "evidence_file": null,
+      "created_at": "2025-08-20T04:29:12",
+      "updated_at": "2025-08-20T04:32:47",
+      "field_of_study": "Chăn nuôi - Thú y - Thuỷ sản",
+      "publisher": "Hội Thú y Việt Nam"
+    }
+  ],
+  "total": 1,
+  "limit": 50,
+  "offset": 0
+}
+*/
+
+export const POST_ARTICLE = `${BASE_URL}/api/me/articles`; //POST
+/*
+request body:
+{
+  "title": "Machine Learning Applications in Healthcare: A Comprehensive Review",
+  "journal_name": "Nature Medicine",
+  "publisher": "Nature Publishing Group",
+  "field_of_study": "Công nghệ thông tin",
+  "publication_date": "2023-12-15",
+  "volume": "29",
+  "issue": "12",
+  "pages": "1-15",
+  "doi": "10.1038/s41591-023-02345-6",
+  "is_main_author": true,
+  "co_authors": "Nguyễn Văn B, Trần Thị C, Dr. John Smith",
+}
+*/
+
+export const GET_ARTICLE_BY_ID = `${BASE_URL}/api/me/articles/{article_id}`; //GET
+/*
+param:
+article_id *
+integer
+*/
+
+export const UPDATE_ARTICLE = `${BASE_URL}/api/me/articles/{article_id}`; //PUT
+/*
+param:
+article_id *
+integer
+request body:
+{
+  "title": "string",
+  "journal_name": "string",
+  "publication_date": "2025-08-20",
+  "field_of_study": "string",
+  "publisher": "string",
+  "volume": "string",
+  "issue": "string",
+  "pages": "string",
+  "doi": "string",
+  "is_main_author": true,
+  "co_authors": "string",
+}
+*/
+
+export const DELETE_ARTICLE = `${BASE_URL}/api/me/articles/{article_id}`; //DELETE
+/*
+param:
+article_id *
+integer
+*/
+
+export const ARTICLE_STATUS = `${BASE_URL}/api/me/articles/stats`; //GET
+/*
+response body:
+{
+  "summary": {
+    "total_articles": 1,
+    "total_points": 0,
+    "main_author_count": 1,
+    "total_journals": 1
+  },
+  "by_status": [
+    {
+      "status": "verified_auto",
+      "count": 1
+    }
+  ],
+  "by_year": [
+    {
+      "year": 2025,
+      "count": 1,
+      "total_points": 0
+    }
+  ],
+  "top_journals": [
+    {
+      "journal_name": "Khoa học Kỹ thuật Thú y",
+      "count": 1
+    }
+  ]
+}
+*/
+
+
+export const GET_FIELD_OF_STUDY = `${BASE_URL}/api/fields-of-study`; //GET
+/* response body:
+{
+  "fields_of_study": [
+    {
+      "id": 1,
+      "name": "Chăn nuôi - Thú y - Thuỷ sản"
+    },
+    {
+      "id": 2,
+      "name": "Cơ học"
+    },
+    {
+      "id": 3,
+      "name": "Cơ khí - Động lực"
+    },
+    {
+      "id": 4,
+      "name": "Công nghệ thông tin"
+    },
+    ...
+*/
