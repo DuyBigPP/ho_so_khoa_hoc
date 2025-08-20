@@ -21,11 +21,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setIsLoading(false)
   }, [])
 
-  const login = async (credentials: LoginCredentials): Promise<void> => {
+  const login = async (credentials: LoginCredentials): Promise<User> => {
     setIsLoading(true)
     try {
       const user = await AuthService.login(credentials)
       setUser(user)
+      return user
     } catch (error) {
       throw error
     } finally {
@@ -33,9 +34,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  const logout = (): void => {
-    AuthService.logout()
-    setUser(null)
+  const logout = async (): Promise<void> => {
+    try {
+      await AuthService.logout()
+    } catch (error) {
+      console.warn('Logout error:', error)
+    } finally {
+      setUser(null)
+    }
+  }
+
+  const updateUser = (userData: Partial<User>): void => {
+    if (user) {
+      const updatedUser = { ...user, ...userData }
+      setUser(updatedUser)
+      // Also update localStorage
+      localStorage.setItem('auth_user', JSON.stringify(updatedUser))
+      console.log('AuthContext: User updated:', updatedUser)
+    }
   }
 
   const value: AuthContextType = {
@@ -43,7 +59,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated: !!user,
     isLoading,
     login,
-    logout
+    logout,
+    updateUser
   }
 
   return (

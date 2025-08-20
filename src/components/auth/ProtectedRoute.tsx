@@ -17,6 +17,15 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, isAuthenticated, isLoading } = useAuth()
   const location = useLocation()
+  
+  console.log('ProtectedRoute check:', {
+    path: location.pathname,
+    requireAuth,
+    allowedRoles,
+    isAuthenticated,
+    userRole: user?.role,
+    isLoading
+  })
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -37,8 +46,9 @@ export function ProtectedRoute({
 
   // Redirect authenticated users away from login page
   if (!requireAuth && isAuthenticated) {
-    const from = location.state?.from?.pathname || '/'
-    return <Navigate to={from} replace />
+    console.log('ProtectedRoute: Authenticated user accessing login, redirecting to dashboard')
+    const redirectPath = user?.role === 'admin' ? '/dashboard' : '/ho-so-ca-nhan'
+    return <Navigate to={redirectPath} replace />
   }
 
   // Check role-based access
@@ -46,9 +56,11 @@ export function ProtectedRoute({
     if (!user || !allowedRoles.includes(user.role)) {
       // Redirect to appropriate dashboard based on user role
       const redirectPath = user?.role === 'admin' ? '/dashboard' : '/ho-so-ca-nhan'
+      console.log('ProtectedRoute: Role mismatch, redirecting to:', redirectPath)
       return <Navigate to={redirectPath} replace />
     }
   }
 
+  console.log('ProtectedRoute: Access granted to:', location.pathname)
   return <>{children}</>
 }

@@ -28,9 +28,14 @@ export function UserSidebar() {
     setOpenSubmenu((prev) => (prev === path ? null : path))
   }
 
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
+  const handleLogout = async () => {
+    try {
+      await logout()
+      navigate('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+      navigate('/login')
+    }
   }
 
   return (

@@ -2,46 +2,24 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute"
 import { AdminLayout } from "@/components/layout/AdminLayout"
 import { UserLayout } from "@/components/layout/UserLayout"
-import { useAuth } from "@/contexts/AuthContext"
 
 // Pages
 import LoginPage from "@/pages/login"
+import CompleteProfilePage from "@/pages/complete-profile"
 import DashboardPage from "@/pages/dashboard/DashboardPage"
 import AnalyticsPage from "@/pages/analytics/AnalyticsPage"
 import HoSoCaNhan from "@/pages/ho_so_ca_nhan"
 import CongTrinhKhoaHoc from "@/pages/cong_trinh_khoa_hoc"
 import QuanLyTaiKhoan from "@/pages/quan_ly_tai_khoan"
 
-// Root redirect component
-function RootRedirect() {
-  const { user, isAuthenticated, isLoading } = useAuth()
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-sm text-muted-foreground">Đang tải...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
-  }
-
-  // Redirect based on user role
-  const redirectPath = user?.role === 'admin' ? '/dashboard' : '/ho-so-ca-nhan'
-  return <Navigate to={redirectPath} replace />
-}
 
 export function AdminRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Root route */}
-        <Route path="/" element={<RootRedirect />} />
+        {/* Root route - redirect to login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Public Routes */}
         <Route 
@@ -49,6 +27,16 @@ export function AdminRoutes() {
           element={
             <ProtectedRoute requireAuth={false}>
               <LoginPage />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Profile Completion Route */}
+        <Route 
+          path="/complete-profile" 
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'user']}>
+              <CompleteProfilePage />
             </ProtectedRoute>
           } 
         />
